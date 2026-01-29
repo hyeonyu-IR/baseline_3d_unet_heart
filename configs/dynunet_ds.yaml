@@ -1,6 +1,7 @@
 project:
-  name: baseline_3d_unet_heart
+  name: baseline_3d_dynunet_ds_heart # DynUNet with deep supervision
   task: left_atrium_segmentation
+
 
 paths:
   data_root: "C:\\Users\\hyeon\\Documents\\miniconda_medimg_env\\data\\heart_segmentation"
@@ -39,13 +40,24 @@ train:
   val_interval: 1
 
 model:
-  name: unet3d
+  name: dynunet
   in_channels: 1
   out_channels: 2
-  channels: [16, 32, 64, 128, 256]
-  strides:  [2, 2, 2, 2]
-  num_res_units: 2
+
+  # DynUNet expects kernels length = strides length + 1
+  strides: [1, 2, 2, 2, 2]
+  kernels: [3, 3, 3, 3, 3]
+
+  # One per stage (including bottleneck)
+  filters: [32, 64, 128, 256, 320]
+
   norm: "INSTANCE"
+  res_block: true
+
+  # Turn On deep supervision
+  deep_supervision: true
+  deep_supr_num: 2 # number of deep supervision outputs to use (from the last), start with 2 (safe). Later you can try 3.
+
 
 optim:
   lr: 0.0002

@@ -114,7 +114,9 @@ train:
 Then run:
 
 ```bash
-python -m src.train --config configs\baseline.yaml
+python -m src.train --config configs\baseline.yaml # baseline 3d unet
+python -m src.train --config configs\dynunet.yaml # nn-UNet
+python -m src.train --config configs\dynunet_ds.yaml # nn-UNet with deep supervision
 ```
 
 Each run automatically generates a timestamped run directory:
